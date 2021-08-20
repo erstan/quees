@@ -10,7 +10,7 @@ git clone https://github.com/erstan/quees.git
 * Run `install.sh` 
 ```shell
 cd quees && chmod +x install.sh && \
-./install.sh || sudo ./install.sh
+sudo ./install.sh
 ```
 ## Dependencies
 
