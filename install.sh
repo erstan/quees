@@ -2,7 +2,7 @@
 
 success=0
 
-gcc src/quees.c -lm -o /usr/local/bin/quees && \
+gcc src/quees.c -lm -lreadline -o /usr/local/bin/quees && \
 rm -rf /usr/local/share/man/man1/quees.1.gz && \
 success=1
 

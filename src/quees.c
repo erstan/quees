@@ -1,6 +1,8 @@
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
+#include<readline/readline.h>
+#include<readline/history.h>
 #include<ceval/ceval.h>
 
 #define VERSION "quees-v0.0.1"
@@ -8,7 +10,7 @@ int silent = 0;
 void startup_msg(void) {
     printf(
         "------------------------------\n"
-        "  %s", VERSION " (linux build) "
+        "       %s", VERSION
         "\n------------------------------\n"
     );
 }
@@ -35,20 +37,24 @@ int option(char * small, char * large, char * arg) {
        !strcmp(large, arg)) return 1;
 return 0;
 }
-
 void launch_interpreter(void) {
     if(!silent) {
         startup_msg();
     }
     interpreter_loop: {
-        char expr[100];
-        printf(">> ");
-        fgets(expr, 100, stdin);
-        if(!strcmp(expr, "exit\n")) {
+        char * expr = readline(">> ");
+	if(expr && *expr)
+		add_history(expr);
+	if(!strcmp(expr, "history")) {
+		for(int i = 0; i < history_get_history_state()->length; i++)
+			printf("    %d %s\n", i+history_base, history_list()[i]->line);
+		goto interpreter_loop;
+	}
+        if(!strcmp(expr, "exit")) {
             exit(0);
-        } else if (!strcmp(expr, "clear\n")) {
+        } else if (!strcmp(expr, "clear")) {
             system("clear");
-            goto interpreter_loop; 
+            goto interpreter_loop;
         }
         printf("%f\n", ceval_result(expr));
         goto interpreter_loop; 
